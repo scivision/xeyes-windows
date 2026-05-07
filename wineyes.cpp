@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0 */
 /*
  * Xeyes for Windows
- * 
+ *
  * (C) 2022 Yutaka Hirata(YOULAB)
  *
  * This software is based on WinEyes 1.2.
@@ -28,32 +28,32 @@ static RECT   prevloc[NUM_EYES] = {{0,0,0,0},{0,0,0,0}};
 //
 static int show_menu = 1;
 //
-// Deprecated: 
-// Original version was not clipping the client area 
+// Deprecated:
+// Original version was not clipping the client area
 // when menu is enabled.
 //
 static bool g_legacyShowMenu = false;
 
 //
 // Low level handler for mouse motion.
-// 
+//
 static HHOOK g_hMouseHook;
 static HWND g_hWnd;
 //
-// Setup the window to be topmost by default. 
-// 
+// Setup the window to be topmost by default.
+//
 static bool g_showTopMost = true;
 
 //
 // Command line option.
-// 
+//
 // Usage:
 //   xeyes.exe -geometry WIDTHxHEIGHT+XOFF+YOFF
 //   xeyes.exe -geometry WIDTHxHEIGHT
 //   xeyes.exe -geometry +XOFF+YOFF
-//   xeyes.exe -monitor screen_no   
+//   xeyes.exe -monitor screen_no
 //     screen_no: 1, 2, ...
-// 
+//
 static int g_geometryXoff;
 static int g_geometryYoff;
 static int g_geometryWidth;
@@ -78,7 +78,7 @@ enum commandOption {
 //
 // Maximum number of monitors to be retrieved.
 // Change this value if you want to increase the maximum value.
-// 
+//
 #define MAX_SCREEN_NO 32
 
 //
@@ -97,7 +97,7 @@ static WinEyesMouseState mouse_state = WEMS_NONE;
 
 
 //
-// Setup the clipping region which includes left eye, 
+// Setup the clipping region which includes left eye,
 // right eye and window caption.
 //
 void setClippingRegion(HWND hWnd)
@@ -114,8 +114,8 @@ void setClippingRegion(HWND hWnd)
 
 		// Get window rectangle in screen coordinates.
 		GetWindowRect(hWnd, &winrect);
-		// Get client rectangle. 
-		// The client coordinates specify the upper-left and 
+		// Get client rectangle.
+		// The client coordinates specify the upper-left and
 		// lower-right corners of the client area.
 		GetClientRect(hWnd, &rect);
 
@@ -145,7 +145,7 @@ void setClippingRegion(HWND hWnd)
 
 		//
 		// Adding the window title bar to the region.
-		// 
+		//
 		if (show_menu) {
 			int width = winrect.right - winrect.left;
 			int height = toff;
@@ -158,9 +158,9 @@ void setClippingRegion(HWND hWnd)
 }
 
 //
-// Change the line of sight of left and right eyes 
+// Change the line of sight of left and right eyes
 // to the mouse cursor position.
-// 
+//
 void WinEyesUpdate(HWND hWnd, int ForceRedrawEyes)
 {
 	RECT  forEllipse1, forEllipse2;
@@ -290,10 +290,10 @@ void WinEyesPaint(HWND hWnd)
 	SelectObject(ps.hdc, GetStockObject(WHITE_PEN) );
 	Ellipse(ps.hdc, forEllipse1.left, forEllipse1.top, forEllipse1.right, forEllipse1.bottom);
 	Ellipse(ps.hdc, forEllipse2.left, forEllipse2.top, forEllipse2.right, forEllipse2.bottom);
-	
+
 	eyecenter[LEYE].x=(forEllipse1.right+forEllipse1.left)/2+1;
 	eyecenter[LEYE].y=(forEllipse1.top+forEllipse1.bottom)/2+1;
-	
+
 	eyecenter[REYE].x=(forEllipse2.right+forEllipse2.left)/2+1;
 	eyecenter[REYE].y=eyecenter[LEYE].y;
 
@@ -305,7 +305,7 @@ void WinEyesPaint(HWND hWnd)
 	EndPaint(hWnd, (LPPAINTSTRUCT)&ps);
 }
 
-BOOL CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
@@ -355,7 +355,7 @@ void TerminateAllApplications(void)
 			if (strcmp(className, WINEYES_APPNAME) == 0) { // found my app
 				DEBUG_PRINT("found %p", className);
 				PostMessage(hd, WM_CLOSE, 0, 0);
-				
+
 			}
 		}
 
@@ -413,7 +413,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	case WM_MOUSEMOVE:
 	{
 		//
-		// Changes the mouse cursor type while the cursor is 
+		// Changes the mouse cursor type while the cursor is
 		// moving over my application.
 		//
 		HCURSOR cursor = LoadCursor(NULL, IDC_HAND);
@@ -571,7 +571,7 @@ BOOL CALLBACK AllMonitorInfoEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT l
 	}
 	else
 	{
-		if (g_monitorInfoCount >= MAX_SCREEN_NO) 
+		if (g_monitorInfoCount >= MAX_SCREEN_NO)
 			return false;
 		g_monitorInfo[g_monitorInfoCount].entry = iMonitor;
 		g_monitorInfoCount++;
@@ -686,7 +686,7 @@ void AnalyzeCommandOption(void)
 			nextSecondParam = false;
 
 			switch (optType) {
-			case OPT_GEOMETRY: 
+			case OPT_GEOMETRY:
 			{
 				int w, h, x, y;
 				int n = swscanf_s(argv[i], L"%dx%d+%d+%d", &w, &h, &x, &y);
@@ -799,7 +799,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	}
 	//
 	// Save the window handle.
-	// 
+	//
 	g_hWnd = hWnd;
 
 	//
