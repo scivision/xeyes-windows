@@ -1,10 +1,16 @@
 # Xeyes for Windows
 
+This code came from the no longer available
+[Yutaka Hirata xeyes repo](https://github.com/yutakakn/xeyes)
+as demonstrated in
+[video](https://www.youtube.com/watch?v=S0Xo-uvGuJY&t=2s).
+We added CMake and updated the API use to compile with MSVC, GCC, Clang...
+
 ## Overview
 
 In the old days, UNIX workstations had large and monochrome screen.
-So, It was easy to lose sight of the mouse cursor. 
-One solution was xeyes. The xeyes application is able to follow 
+So, It was easy to lose sight of the mouse cursor.
+One solution was xeyes. The xeyes application is able to follow
 the mouse cursor.
 Xeyes for Windows is an xeyes application that runs on Windows.
 
@@ -24,6 +30,7 @@ Microsoft Windows 10 and 11
 ## Usage
 
 ### Command line options:
+
 - Specifying window size and position.
   - -geometry WIDTHxHEIGHT+XOFF+YOFF
   - -geometry WIDTHxHEIGHT
@@ -33,6 +40,7 @@ Microsoft Windows 10 and 11
     - screen_no: 1, 2, ... 32
 
 *Sample of command line options:*
+
 ```
 ; Display the app on primary monitor.
 xeyes.exe -monitor 1
@@ -40,36 +48,30 @@ xeyes.exe -monitor 1
 ; Display the app on third monitor.
 xeyes.exe -monitor 3
 
-; All monitors are displayed as one coordinate axis, 
+; All monitors are displayed as one coordinate axis,
 ; with the origin at the upper left corner of the primary monitor
-; at X=2000, Y=800. 
+; at X=2000, Y=800.
 ; The width of the applicaiton is 300 and the height is 700.
 xeyes.exe -geometry 300x200+2000+700
 
-; Display the app at X coordinate 100 and Y coordinate 80, 
+; Display the app at X coordinate 100 and Y coordinate 80,
 ; with the origin in the upper left of second monitor.
 xeyes.exe -monitor 2 -geometry +100+80
 ```
 
-### Terminate all xeyes:
-  - You can terminate all xeyes application that runs on your windows.
-    Hit ALT-space to bring up the system menu and then select "Terminate all xeyes".
+Terminate all xeyes application by ALT-space to bring up the system menu and then select "Terminate all xeyes".
 
-### Moving the eyes:
-  - You can move the eyes by left-click, hold, and dragging on the eyes
+Move the eyes by left-click, hold, and dragging on the eyes
 
-### Resizing the eyes:
-  - Double-click or right-click the eyes to bring up the windows frame.
-    Click and drag the frame.  Then double-click or right-click the eyes 
-    to remove the frame.
+Resizing the eyes by Double-click or right-click the eyes to bring up the windows frame.
+Click and drag the frame.  Then double-click or right-click the eyes to remove the frame.
 
 ### Always on top:
-  - Hit ALT-space to bring up the system menu and then select "Always
-    on top".
-  - Alternately: Double-click or right-click the eyes to bring up the
-    windows frame.  Then right-click on the menu bar to bring up the system
-    menu.  Select "Always on top".  Then double-click or right-click the
-    eyes to remove the frame.
+Hit ALT-space to bring up the system menu and then select "Always on top".
+Alternately: Double-click or right-click the eyes to bring up the windows frame.
+Then right-click on the menu bar to bring up the system menu.
+Select "Always on top".
+Then double-click or right-click the eyes to remove the frame.
 
 
 ## History
