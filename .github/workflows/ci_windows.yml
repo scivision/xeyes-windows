@@ -19,6 +19,13 @@ jobs:
     - name: Build with MSVC
       run: cmake --workflow msvc
 
+    - name: .exe for release
+      uses: actions/upload-artifact@v7
+      if: success()
+      with:
+        name: wineyes.exe
+        path: build/Release/wineyes.exe
+
 
   gcc:
     runs-on: windows-latest
