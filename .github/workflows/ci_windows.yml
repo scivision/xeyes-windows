@@ -1,0 +1,33 @@
+name: ci_windows
+
+on:
+  push:
+    paths:
+      - "!**.md"
+  workflow_dispatch:
+
+jobs:
+
+  msvc:
+    runs-on: windows-2025-vs2026
+    timeout-minutes: 5
+
+    # github actions generally broken for shared lib, even when exe in cwd
+
+    steps:
+    - &checkout
+      uses: actions/checkout@v6
+
+    - name: Build with MSVC
+      run: cmake --workflow msvc
+
+
+  gcc:
+    runs-on: windows-latest
+    timeout-minutes: 5
+
+    steps:
+    - *checkout
+
+    - name: Build with GCC
+      run: cmake --workflow default
