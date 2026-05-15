@@ -103,7 +103,7 @@ static WinEyesMouseState mouse_state = WEMS_NONE;
 void setClippingRegion(HWND hWnd)
 {
 	if (g_legacyShowMenu && show_menu) {
-		SetWindowRgn(hWnd, NULL, 1);
+		SetWindowRgn(hWnd, nullptr, 1);
 	}
 	else {
 		POINT size;
@@ -314,7 +314,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		if (wParam == IDOK)
 		{
-			EndDialog(hDlg, (int)NULL);
+			EndDialog(hDlg, 0);
 			return (TRUE);
 		}
 		break;
@@ -359,7 +359,7 @@ void TerminateAllApplications(void)
 		}
 
 		nextHd = GetWindow(hd, GW_HWNDNEXT);
-		if (nextHd == NULL)
+		if (nextHd == nullptr)
 			break;
 		hd = nextHd;
 	}
@@ -367,7 +367,6 @@ void TerminateAllApplications(void)
 
 LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	FARPROC lpProcAbout;
 	HMENU hMenu;
 	static int dragx = 0, dragy = 0;
 
@@ -383,7 +382,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 
 	case WM_SIZE:
 		reset_clipping_region = 1;
-		RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE);
+		RedrawWindow(hWnd, nullptr, nullptr, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE);
 		break;
 
 	case WM_LBUTTONDOWN:
@@ -405,7 +404,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	{
 		show_menu = show_menu ^ 1;
 		reset_clipping_region = 1;
-		RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE);
+		RedrawWindow(hWnd, nullptr, nullptr, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE);
 		break;
 	}
 
@@ -415,7 +414,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 		// Changes the mouse cursor type while the cursor is
 		// moving over my application.
 		//
-		HCURSOR cursor = LoadCursor(NULL, IDC_HAND);
+		HCURSOR cursor = LoadCursor(nullptr, IDC_HAND);
 		SetCursor(cursor);
 
 		//
@@ -445,7 +444,6 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	case WM_SYSCOMMAND:
 		if (wParam == ID_ABOUT) {
 			DialogBoxA(hInst, "AboutBox", hWnd, About);
-			FreeProcInstance(lpProcAbout);
 			break;
 		}
 		else if (wParam == ID_DEFAULT_SIZE) {
@@ -464,7 +462,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 			//
 			WinEyesPaint(hWnd);
 			reset_clipping_region = 1;
-			RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE);
+			RedrawWindow(hWnd, nullptr, nullptr, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE);
 			break;
 		}
 		else if (wParam == ID_ALWAYS_ON_TOP) {
@@ -495,7 +493,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 		InsertMenu(hMenu, 2, MF_STRING | MF_BYPOSITION, ID_DEFAULT_SIZE, TEXT("&Default Size"));
 		InsertMenu(hMenu, 3, MF_STRING | MF_BYPOSITION, ID_ALWAYS_ON_TOP, TEXT("&Always on Top"));
 		InsertMenu(hMenu, 4, MF_STRING | MF_BYPOSITION, ID_TERMINATE_ALL, TEXT("&Terminate all xeyes"));
-		AppendMenu(hMenu, MF_SEPARATOR, NULL, NULL);
+		AppendMenu(hMenu, MF_SEPARATOR, 0, nullptr);
 		AppendMenu(hMenu, MF_STRING, ID_ABOUT, TEXT("A&bout Xeyes for Windows..."));
 		break;
 
@@ -518,17 +516,17 @@ BOOL WinEyesInit(HINSTANCE hInstance)
 	BOOL bSuccess = FALSE;
 
 	hMemory = LocalAlloc(LPTR, sizeof(WNDCLASS));
-	if (hMemory != NULL) {
+	if (hMemory != nullptr) {
 		pWndClass = (PWNDCLASS)LocalLock(hMemory);
 
-		if (pWndClass != NULL) {
+		if (pWndClass != nullptr) {
 			pWndClass->style = CS_DBLCLKS; // Accept double click events
 			pWndClass->lpfnWndProc = WinEyesWndProc;
 			pWndClass->hInstance = hInstance;
 			pWndClass->hIcon = LoadIcon(hInstance, TEXT("WINEYES"));
-			pWndClass->hCursor = LoadCursor(NULL, IDC_ARROW);
+			pWndClass->hCursor = LoadCursor(nullptr, IDC_ARROW);
 			pWndClass->hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
-			pWndClass->lpszMenuName = (LPSTR)NULL;
+			pWndClass->lpszMenuName = nullptr;
 			pWndClass->lpszClassName = (LPSTR)WINEYES_APPNAME;
 			bSuccess = RegisterClass(pWndClass);
 
@@ -545,7 +543,7 @@ LRESULT CALLBACK GlobalMouseHandler(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	MOUSEHOOKSTRUCT* pMouseStruct = (MOUSEHOOKSTRUCT*)lParam;
 
-	if (pMouseStruct != NULL) {
+	if (pMouseStruct != nullptr) {
 		if (wParam == WM_MOUSEMOVE) {
 			WinEyesUpdate(g_hWnd, FALSE);
 
@@ -598,7 +596,7 @@ void MoveApplWindow(void)
 	nh = g_geometryHeight;
 
 	g_monitorInfoCount = 0;
-	EnumDisplayMonitors(NULL, NULL, AllMonitorInfoEnumProc, NULL);
+	EnumDisplayMonitors(nullptr, nullptr, AllMonitorInfoEnumProc, 0);
 	if (g_monitorNumber <= g_monitorInfoCount) {
 		int mx, my, mw, mh;
 		int index = g_monitorNumber - 1;
@@ -762,8 +760,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	if (!WinEyesInit(hInstance))
 	{
-		MessageBoxA(NULL, "Class registration failed", "Error", MB_OK);
-		return(NULL);
+		MessageBoxA(nullptr, "Class registration failed", "Error", MB_OK);
+		return 0;
 	}
 
 	hInst = hInstance;
@@ -783,17 +781,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		CW_USEDEFAULT,
 		r.right - r.left,
 		r.bottom - r.top,
-		NULL,
-		NULL,
+		nullptr,
+		nullptr,
 		hInstance,
-		NULL
+		nullptr
 	);
 
 	if (!hWnd)
 	{
 		char buf[80];
 		snprintf(buf, sizeof(buf), "Could not create window %lu", GetLastError());
-		MessageBoxA(NULL, buf, "Error", MB_OK);
+		MessageBoxA(nullptr, buf, "Error", MB_OK);
 		return(0);
 	}
 	//
@@ -804,7 +802,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	//
 	// Add low level handler of mouse motion.
 	//
-	g_hMouseHook = SetWindowsHookEx(WH_MOUSE_LL, GlobalMouseHandler, hInstance, NULL);
+	g_hMouseHook = SetWindowsHookEx(WH_MOUSE_LL, GlobalMouseHandler, hInstance, 0);
 
 	MoveApplWindow();
 
@@ -814,7 +812,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	ShowTopMost();
 
-	while (GetMessage(&msg, NULL, (int)NULL, (int)NULL))
+	while (GetMessage(&msg, nullptr, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
