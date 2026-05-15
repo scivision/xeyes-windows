@@ -350,10 +350,9 @@ void TerminateAllApplications(void)
 	hd = GetTopWindow(rootHd);
 	while (hd) {
 		ZeroMemory(className, sizeof(className));
-		ret = GetClassName(hd, className, sizeof(className));
+		ret = GetClassNameA(hd, className, sizeof(className));
 		if (ret > 0) {
 			if (strcmp(className, WINEYES_APPNAME) == 0) { // found my app
-				DEBUG_PRINT("found %p", className);
 				PostMessage(hd, WM_CLOSE, 0, 0);
 
 			}
@@ -445,7 +444,7 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 
 	case WM_SYSCOMMAND:
 		if (wParam == ID_ABOUT) {
-			DialogBox(hInst, "AboutBox", hWnd, About);
+			DialogBoxA(hInst, "AboutBox", hWnd, About);
 			FreeProcInstance(lpProcAbout);
 			break;
 		}
@@ -493,11 +492,11 @@ LRESULT CALLBACK PASCAL WinEyesWndProc(HWND hWnd, UINT message, WPARAM wParam, L
 		DeleteMenu(hMenu, SC_RESTORE, MF_BYCOMMAND);
 		DeleteMenu(hMenu, SC_MINIMIZE, MF_BYCOMMAND);
 		DeleteMenu(hMenu, SC_MAXIMIZE, MF_BYCOMMAND);
-		InsertMenu(hMenu, 2, MF_STRING | MF_BYPOSITION, ID_DEFAULT_SIZE, "&Default Size");
-		InsertMenu(hMenu, 3, MF_STRING | MF_BYPOSITION, ID_ALWAYS_ON_TOP, "&Always on Top");
-		InsertMenu(hMenu, 4, MF_STRING | MF_BYPOSITION, ID_TERMINATE_ALL, "&Terminate all xeyes");
+		InsertMenu(hMenu, 2, MF_STRING | MF_BYPOSITION, ID_DEFAULT_SIZE, TEXT("&Default Size"));
+		InsertMenu(hMenu, 3, MF_STRING | MF_BYPOSITION, ID_ALWAYS_ON_TOP, TEXT("&Always on Top"));
+		InsertMenu(hMenu, 4, MF_STRING | MF_BYPOSITION, ID_TERMINATE_ALL, TEXT("&Terminate all xeyes"));
 		AppendMenu(hMenu, MF_SEPARATOR, NULL, NULL);
-		AppendMenu(hMenu, MF_STRING, ID_ABOUT, "A&bout Xeyes for Windows...");
+		AppendMenu(hMenu, MF_STRING, ID_ABOUT, TEXT("A&bout Xeyes for Windows..."));
 		break;
 
 	case WM_DESTROY:
@@ -526,7 +525,7 @@ BOOL WinEyesInit(HINSTANCE hInstance)
 			pWndClass->style = CS_DBLCLKS; // Accept double click events
 			pWndClass->lpfnWndProc = WinEyesWndProc;
 			pWndClass->hInstance = hInstance;
-			pWndClass->hIcon = LoadIcon(hInstance, "WINEYES");
+			pWndClass->hIcon = LoadIcon(hInstance, TEXT("WINEYES"));
 			pWndClass->hCursor = LoadCursor(NULL, IDC_ARROW);
 			pWndClass->hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 			pWndClass->lpszMenuName = (LPSTR)NULL;
@@ -763,7 +762,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	if (!WinEyesInit(hInstance))
 	{
-		MessageBox(NULL, "Class registration failed", "Error", MB_OK);
+		MessageBoxA(NULL, "Class registration failed", "Error", MB_OK);
 		return(NULL);
 	}
 
@@ -775,7 +774,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	r.bottom = DEFAULT_H;
 	AdjustWindowRectEx(&r, WS_OVERLAPPEDWINDOW, 0, WS_EX_TOOLWINDOW);
 
-	hWnd = CreateWindowEx(
+	hWnd = CreateWindowExA(
 		WS_EX_TOOLWINDOW, // Make a tool window so that it doesn't appear in the taskbar
 		WINEYES_APPNAME,
 		WINEYES_TITLE,
@@ -793,8 +792,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	if (!hWnd)
 	{
 		char buf[80];
-		snprintf(buf, sizeof(buf), "Could not create window %d", GetLastError());
-		MessageBox(NULL, buf, "Error", MB_OK);
+		snprintf(buf, sizeof(buf), "Could not create window %lu", GetLastError());
+		MessageBoxA(NULL, buf, "Error", MB_OK);
 		return(0);
 	}
 	//
